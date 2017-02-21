@@ -4,6 +4,7 @@ import argparse
 import os
 import logging
 import subprocess
+import gzip
 from datetime import date
 from urlparse import urlparse, urlunparse
 
@@ -44,6 +45,13 @@ def sniper_argparser():
     group.add_argument('--center', dest='center', help='Center name')
     group.add_argument('--sniper-exe', dest='sniper_exe', default='bam-somaticsniper', help='SomaticSniper Exec Name')
     return parser
+
+def gunzip(infile, outfile):
+    inF = gzip.GzipFile(infile, 'rb')
+    s = inF.read()
+    inF.close()
+    with open(outfile, 'wb') as outF:
+        outF.write(s)
 
 def tcga_header_arguments():
     return set(('reference_id', 'center',
@@ -87,7 +95,13 @@ def create_sniper_cmdline(namespace_dict, reference, tumor_bam, normal_bam, temp
 
 def create_workspace(workdir, reference, tumor_bam, normal_bam):
 
-    new_ref = symlink_workspace_file(workdir, reference, "ref_genome.fasta")
+    if reference.endswith('.gz'):
+        new_ref = os.path.join(args.workdir, "ref_genome.fasta")
+        gunzip(args.f, new_ref)
+        args.f = new_ref
+    else:
+        new_ref = symlink_workspace_file(workdir, reference, "ref_genome.fasta")
+
     if not os.path.exists(reference + ".fai"):
         print "Indexing", new_ref
         subprocess.check_call( ["/usr/bin/samtools", "faidx", new_ref] )

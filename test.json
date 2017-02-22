@@ -1,0 +1,18 @@
+{
+  "reference": {
+    "path": "http://hgwdev.cse.ucsc.edu/~jeltje/public_data/genome.fa.gz",
+    "class": "File"
+  },
+  "normalbam": {
+    "path":"https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/data_for_testing/HCC1143_ds/HCC1143_BL.bam",
+    "class": "File"
+  },
+  "mutations": {
+    "path": "/tmp/out.vcf",
+    "class": "File"
+  },
+  "tumorbam": {
+    "path":"https://dcc.icgc.org/api/v1/download?fn=/PCAWG/reference_data/data_for_testing/HCC1143_ds/HCC1143.bam",
+    "class": "File"
+  }
+}

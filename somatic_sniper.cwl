@@ -10,7 +10,7 @@ doc: "Runs somatic sniper snp caller on input bam files"
 
 hints:
   DockerRequirement:
-    dockerPull: opengenomics/somatic-sniper:1.0.5.0
+    dockerPull: quay.io/opengenomics/somatic-sniper
 
 #requirements:
 #  - class: InlineJavascriptRequirement

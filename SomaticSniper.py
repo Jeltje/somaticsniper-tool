@@ -4,7 +4,6 @@ import argparse
 import os
 import logging
 import subprocess
-import gzip
 from datetime import date
 from urlparse import urlparse, urlunparse
 
@@ -47,11 +46,13 @@ def sniper_argparser():
     return parser
 
 def gunzip(infile, outfile):
-    inF = gzip.GzipFile(infile, 'rb')
-    s = inF.read()
-    inF.close()
-    with open(outfile, 'wb') as outF:
-        outF.write(s)
+    cmd = (' ').join(['zcat', infile])
+    with open(outfile, 'w') as outF:
+        p = subprocess.Popen(cmd, shell=True, stdout=outF, stderr=subprocess.PIPE)
+    stdout,stderr =  p.communicate()
+    if len(stderr):
+        print "unzip command failed:", stderr
+        raise Exception("unzip failed")
 
 def tcga_header_arguments():
     return set(('reference_id', 'center',
